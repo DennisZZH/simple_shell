@@ -134,7 +134,7 @@ int split_tokens(int numTokens, char tokens[MAXLINE][MAXTOKEN], char commands[50
 
 
 void sigchld_handler(int sig){
-	wait(NULL);
+	waitpid(-1, NULL, WNOHANG);
 }
 
 
