@@ -134,7 +134,7 @@ int split_tokens(int numTokens, char tokens[MAXLINE][MAXTOKEN], char commands[50
 
 
 void sigchld_handler(int sig){
-	wait(NULL);
+	waitpid(-1, NULL, WNOHANG);
 }
 
 
@@ -322,7 +322,7 @@ void launch_pipes(int numCommands, char commands[50][MAXLINE][MAXTOKEN], bool is
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
 
 	char line[MAXLINE];
 	char tokens[MAXLINE][MAXTOKEN]; 
@@ -330,12 +330,24 @@ int main(){
 	int numTokens = 0;
 	int numCommands = 0;
 	bool isBackground = false;
-	
+	bool isPrompt = false;
+
+	if(argc == 2){
+	  if(strcmp(argv[1],"-n") == 0){
+	    isPrompt = false;
+	  }
+	}else{
+	  isPrompt = true;
+	}
+       
 	while(true){
 
 		fflush(stdout);
 		fflush(stderr);
-		type_prompt(); 
+
+		if(isPrompt){
+		  type_prompt();
+		}
 
 		memset(line,0,strlen(line));
 		get_line(line);
